@@ -1,0 +1,29 @@
+.thumb{
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 3px;
+    background-color: white;
+  }
+  .thumb:hover{
+    box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+  }
+  .container1{
+    position: relative;
+    max-width: 168px; 
+    margin: 0 auto; 
+    border-radius: 4px;
+  }
+    
+  .container1 .content{
+    position: absolute; 
+    bottom: 0;
+    background: rgb(0, 0, 0);
+    background: rgba(0, 0, 0, 0.691); 
+    color: #f1f1f1; 
+    width:100%;
+    padding: 20px; 
+    border-radius:0 0 4px 4px;
+  }
+  .container1 .content:hover{
+    text-decoration: underline;
+  }

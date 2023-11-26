@@ -1,0 +1,42 @@
+#l01{
+    /*z-index: 1;*/
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    /*background-color: #333;*/
+    background-color: #343a40;
+    }
+.li01{
+    float: left;
+    }
+.li01 a{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px;
+    text-decoration: none;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }   
+.li01 a:hover {
+    background-color: #111111;
+    }
+.li01 a:active{
+    background-color: rgba(123, 126, 123, 0.801);
+    }
+.li01 button{
+    background-color: #333;
+    border:none;
+    color: white;
+    display: block;
+    cursor: pointer;
+    padding: 18px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+.li01 button:hover {
+        background-color: #111111;
+        }
+    .li01 button:active{
+        background-color: rgba(123, 126, 123, 0.801);
+        }
+ 
