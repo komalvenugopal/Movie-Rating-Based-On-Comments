@@ -5,6 +5,10 @@
         </div>
         <h3>Login</h3>
     </div> 
+    <?php if (isset($login_error)): ?>
+        <p style="color: red;"><?php echo $login_error; ?></p>
+    <?php endif; ?>
+
     <form class="modal-content animate" style="margin-top:0;background-color:grey;border-radius:0 0 5px 5px" action="" method="post">
         <div class="container" style="border-radius:5px;margin:30px"> 
             <label for="uname"><b>Username</b></label><br>
@@ -16,49 +20,47 @@
             <a onclick="document.getElementById('signupform').style.display='block'" style="color:white;cursor:pointer">Not a User?</a>
         </div>
     </form>
-    <?php 
-        $uname1="";
-        $pswd1="";
-        if(isset($_POST['loginBtn']))
-        {
-            $uname1=$_POST['uname'];
-            $pswd1=$_POST['psw'];
-            $con=mysqli_connect("localhost","root","","mydb");
-            if(mysqli_connect_errno())
-            {
-                die("could not connect".mysqli_connect_error());
-            }
-            else
-            {
-                $query=("select * from user where username='".$uname1."';");
-                mysqli_query($con,$query);
-                if(mysqli_affected_rows($con)>0)
-                {
-                    $query="select *from user where username='".$uname1."' and password=PASSWORD('".$pswd1."');";
-                    $result=mysqli_query($con,$query);
-                    $array=mysqli_fetch_array($result,MYSQLI_ASSOC);
-                    if(mysqli_affected_rows($con)>0)
-                    {
-                        //echo("Login Succesful");
-                        $_SESSION['loggedin']=true;
-                        $_SESSION['email']=$array['email'];
-                        exit(header("Location:Login.php"));
-                        ob_end_flush();
-                    }
-                }
-                else
-                {
-                    echo "<script>
-                    document.getElementById('unameDoesntExist').innerHTML='User Doesn't exist';
-                    </script>";
-                }  
-            }
+
+    <?php
+session_start(); // Start the session at the beginning of the script
+
+// Check if the form is submitted
+if (isset($_POST['loginBtn'])) {
+    $uname1 = $_POST['uname'];
+    $pswd1 = $_POST['psw'];
+
+    // Database connection
+    $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
+    if (mysqli_connect_errno()) {
+        die("Connection failed: " . mysqli_connect_error());
+    }
+
+    // Prepared statement to prevent SQL Injection
+    $query = "SELECT * FROM user WHERE username = ? AND password = ?";
+    $stmt = mysqli_prepare($con, $query);
+    if ($stmt) {
+        mysqli_stmt_bind_param($stmt, "ss", $uname1, $pswd1);
+        mysqli_stmt_execute($stmt);
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $user = mysqli_fetch_assoc($result);
+            // Set session variables
+            $_SESSION['loggedin'] = true;
+            $_SESSION['email'] = $user['email']; // Assuming you have an email field
+
+            // Redirect to another page
+            header("Location: Login.php");
+            exit();
+        } else {
+            // User not found or password incorrect
+            $login_error = "Invalid username or password";
         }
-        else
-        {
-            echo "<script>
-            document.getElementById('unameDoesntExist').innerHTML='';
-            </script>";
-        }
-    ?>
+        mysqli_stmt_close($stmt);
+    } else {
+        $login_error = "Failed to prepare the statement";
+    }
+    mysqli_close($con);
+}
+?>   
 </div>

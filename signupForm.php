@@ -20,57 +20,69 @@
         </div>
     </form>
     <?php
-        $signUpBtn=$_POST['signUpBtn'];
-        if(isset($signUpBtn))
-        {
-            $em=$_POST['Email'];
-            $uname=$_POST['uname'];
-            $mobile=$_POST['mobile'];
-            $pswd=$_POST['psw'];
-            $fullname=$_POST['fullname'];
-        
-            $con=mysqli_connect("localhost","root","","mydb");
-            if(mysqli_connect_errno())
-            {
-                die("could not connect".mysqli_connect_error());
-            }
-            else
-            {
-                $query=mysqli_query($con,"select *from user where email='".$em."';");
-                if(mysqli_affected_rows($con)>0)
-                {
-                    echo "<script>
-                    document.getElementById('emailexistsWarning').innerHTML='Email already exists<br><br>';
-                    document.getElementById('signupform').style.display='block';
-                    </script>";    
+$signUpBtn = $_POST['signUpBtn'];
+if (isset($signUpBtn)) {
+    $em = $_POST['Email'];
+    $uname = $_POST['uname'];
+    $mobile = $_POST['mobile'];
+    $pswd = $_POST['psw'];
+    $fullname = $_POST['fullname'];
+
+    $con = mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com", "r42xjjzx0hy6jn0q", "bjv1aq1p3q3was3o", "uy2phg3cofsy8520");
+    if (mysqli_connect_errno()) {
+        die("Could not connect" . mysqli_connect_error());
+    } else {
+        $query = mysqli_query($con, "SELECT * FROM user WHERE email = '" . $em . "';");
+        if (mysqli_num_rows($query) > 0) {
+            echo "<script>
+            document.getElementById('emailexistsWarning').innerHTML='Email already exists<br><br>';
+            document.getElementById('signupform').style.display='block';
+            </script>";
+        } else {
+            echo "<script>document.getElementById('emailexistsWarning').innerHTML=''</script>";
+
+            // Check if the username already exists
+            $query = mysqli_query($con, "SELECT * FROM user WHERE username = '" . $uname . "';");
+            if (mysqli_num_rows($query) > 0) {
+                echo "<script>
+                document.getElementById('userNameExists').innerHTML='Username already exists<br><br>';
+                document.getElementById('signupform').style.display='block';
+                </script>";
+            } else {
+                echo "<script>document.getElementById('userNameExists').innerHTML=''</script>";
+
+                // Assume you have already validated and sanitized the user inputs
+                $em = $_POST['Email'];
+                $uname = $_POST['uname'];
+                $mobile = $_POST['mobile'];
+                $pswd = $_POST['psw'];
+                $fullname = $_POST['fullname'];
+
+                // Hash the password using password_hash
+                $hashed_password = password_hash($pswd, PASSWORD_DEFAULT);
+
+                $con = mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com", "r42xjjzx0hy6jn0q", "bjv1aq1p3q3was3o", "uy2phg3cofsy8520");
+                if (mysqli_connect_errno()) {
+                    die("Could not connect" . mysqli_connect_error());
                 }
-                else
-                {
-                    echo "<script>document.getElementById('emailAlreadyExists').innerHTML=''</script>";
-                    $query=mysqli_query($con,"select *from user where username='".$uname."';");
-                    if(mysqli_affected_rows($con)>0)
-                    {
-                        echo "<script>
-                        document.getElementById('userNameExists').innerHTML='Username already exists<br><br>';
-                        document.getElementById('signupform').style.display='block';
-                        </script>";
-                    }
-                    else
-                    {
-                        echo "<script>document.getElementById('userNameExists').innerHTML=''</script>";
-                        $sql="insert into user values('".$em."','".$uname."',".$mobile.",password('".$pswd."'),'".$fullname."')";
-              
-                        if ($con->query($sql) === TRUE) 
-                        {
-                            echo "<script>window.alert('Registered Successfully');</script>";
-                        }
-                        else 
-                        {
-                            echo "Error: " . $sql . "<br>" . $conn->error;
-                        }
-                    }
-                }      
-            }
+
+                // Use a prepared statement
+                $stmt = $con->prepare("INSERT INTO user (email, username, mobile, password, fullname) VALUES (?, ?, ?, ?, ?)");
+                $stmt->bind_param("ssdss", $em, $uname, $mobile, $hashed_password, $fullname);
+
+                if ($stmt->execute()) {
+                    echo "<script>window.alert('Registered Successfully');</script>";
+                } else {
+                    echo "Error: " . $stmt->error;
+                }
+
+                $stmt->close();
+                $con->close();
+
+                            }
         }
-    ?>
+    }
+}
+?>
+
 </div>

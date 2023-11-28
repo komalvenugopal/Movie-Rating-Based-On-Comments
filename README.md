@@ -1,2 +1,0 @@
-# Movie-Rating-Based-On-Comments-Using-Multi-Naive-Bayes-Classifier
-The datbase has many movies and ratings. A portal is generated for the database where a person can give the rating as well as comment on the movie after logging in. The movie is rated based on the average of normal rating given and the rating formed using the comment which is done based on the MultiNaive Bayes classifier using Natural Language Processing.

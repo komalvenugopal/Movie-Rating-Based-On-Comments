@@ -79,7 +79,7 @@
             $pswd=$_POST['psw'];
             $fullname=$_POST['fullname'];
         
-            $con=mysqli_connect("localhost","root","","mydb");
+            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
             if(mysqli_connect_errno())
             {
                 die("could not connect".mysqli_connect_error());
@@ -125,7 +125,7 @@
         if(isset($_POST['delUBtn']))
         {
             $em=$_POST['Email1'];
-            $con=mysqli_connect("localhost","root","","mydb");
+            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
             if(mysqli_connect_errno())
             {
                 die("could not connect".mysqli_connect_error());
@@ -155,7 +155,7 @@
         }
         if(isset($_POST['viewBtn']))
         {
-            $con=mysqli_connect("localhost","root","","mydb");
+            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
             if(mysqli_connect_errno())
             {
                 die("could not connect".mysqli_connect_error());

@@ -8,7 +8,7 @@ session_start();
             <?php
                 if(isset($_GET["aid"]))
                 {
-                    $con=mysqli_connect("localhost","root","","mydb");
+                    $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
                     if(mysqli_connect_errno())
                     {
                         die("could not connect".mysqli_connect_error());
@@ -54,7 +54,7 @@ session_start();
         </style>
     </head>
     <body style="margin:0;background-image: url('<?php
-         $con=mysqli_connect("localhost","root","","mydb");
+         $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
          $img=mysqli_query($con,"SELECT * FROM bg ORDER BY RAND() LIMIT 1");
          $img=mysqli_fetch_array($img,MYSQLI_ASSOC);
          echo $img['bg'];
@@ -89,7 +89,7 @@ session_start();
                     <?php
                         if(isset($_GET["aid"]))
                         {
-                            $con=mysqli_connect("localhost","root","","mydb");
+                            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
                             if(mysqli_connect_errno())
                             {
                                 die("could not connect".mysqli_connect_error());

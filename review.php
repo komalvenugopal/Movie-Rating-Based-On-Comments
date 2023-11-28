@@ -13,7 +13,7 @@ session_start();
             <?php
                 if(isset($_GET["mid"]))
                 {
-                    $con=mysqli_connect("localhost","root","","mydb");
+                    $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
                     if(mysqli_connect_errno())
                     {
                         die("could not connect".mysqli_connect_error());
@@ -62,7 +62,7 @@ session_start();
         </style>
     </head>
     <body style="margin:0;background-image: url('<?php
-         $con=mysqli_connect("localhost","root","","mydb");
+         $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
          $img=mysqli_query($con,"SELECT * FROM bg ORDER BY RAND() LIMIT 1");
          $img=mysqli_fetch_array($img,MYSQLI_ASSOC);
          echo $img['bg'];
@@ -100,7 +100,7 @@ session_start();
                     <?php
                         if(isset($_GET["mid"]))
                         {
-                            $con=mysqli_connect("localhost","root","","mydb");
+                            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
                             if(mysqli_connect_errno())
                             {
                                 die("could not connect".mysqli_connect_error());
@@ -183,7 +183,7 @@ session_start();
                     {
                         if(isset($_POST['submit']))
                         {
-                            $con=mysqli_connect("localhost","root","","mydb");
+                            $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
                             if(mysqli_connect_errno())
                             {
                                 die("could not connect".mysqli_connect_error());
@@ -220,28 +220,37 @@ session_start();
             </form>
         </div>
         <?php
-        $con=mysqli_connect("localhost","root","","mydb");
+        $con=mysqli_connect("pxukqohrckdfo4ty.cbetxkdyhwsb.us-east-1.rds.amazonaws.com","r42xjjzx0hy6jn0q","bjv1aq1p3q3was3o","uy2phg3cofsy8520");
         if(mysqli_connect_errno())
         {
             die("could not connect".mysqli_connect_error());
         }
         else
         {
+
             if(isset($_POST['revBtn']))
             {
                 mysqli_query($con,"select * from rnr where m_id=".$mid." and uemail='".$_SESSION['email']."';");
                 if(mysqli_affected_rows($con)>0)
                 { 
                     $a=$_POST['review'];
-                    $output = shell_exec('python ouuu.py '.$a);
-                    $output=(int)$output;
+                    exec('/usr/local/anaconda3/bin/python3 Train/predict_rating.py ' . $a, $output, $returnVar);
+                    // foreach ($output as $line) {
+                    //     echo htmlspecialchars($line, ENT_QUOTES, 'UTF-8') . "<br>";
+                    // }        
+                    $output=((int)$output[0]);
+                    echo $output;        
+
                     mysqli_query($con,"update rnr set Erating=".$output.",review_head= '".mysqli_real_escape_string($con,$_POST['heading'])."', review='".mysqli_real_escape_string($con,$_POST['review'])."', timestamp=NOW() where m_id=".$mid." and uemail='".$_SESSION['email']."';");
                 }
                 else
                 { 
+                    echo "Not found";
                     $a=$_POST['review'];
-                    $output = shell_exec('python ouuu.py '.$a);
+                    $output = shell_exec('python Train/predict.py'.$a);
                     $output=(int)$output;
+                    echo $output;
+                    
                     $s=mysqli_query($con,"insert into rnr (m_id,uemail,review_head,review,timestamp,Erating) values(".$mid.",'".$_SESSION['email']."','".mysqli_real_escape_string($con,$_POST['heading'])."','".mysqli_real_escape_string($con,$_POST['review'])."',NOW(),".$output.");");
                 } 
             }
